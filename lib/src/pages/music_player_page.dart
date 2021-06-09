@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/src/helpers/helpers.dart';
 import 'package:music_player/src/widgets/custom_appbar.dart';
 
 class MusicPlayerPage extends StatelessWidget {
@@ -10,8 +11,39 @@ class MusicPlayerPage extends StatelessWidget {
         CustomAppBar(),
         _DiscDuration(),
         _Title(),
+        Expanded(child: _Lyrics())
       ],
     ));
+  }
+}
+
+class _Lyrics extends StatelessWidget {
+  const _Lyrics({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final lyrics = getLyrics().map(
+      (String line) {
+        return Text(
+          line,
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white.withOpacity(0.6),
+          ),
+        );
+      },
+    ).toList();
+
+    return Container(
+      child: ListWheelScrollView(
+        itemExtent: 42,
+        physics: BouncingScrollPhysics(),
+        diameterRatio: 1.5,
+        children: lyrics,
+      ),
+    );
   }
 }
 
@@ -49,7 +81,7 @@ class _Title extends StatelessWidget {
           FloatingActionButton(
             elevation: 0,
             highlightElevation: 0,
-            onPressed: (){
+            onPressed: () {
               // TODO: Boton
             },
             backgroundColor: Color(0xffF8CB51),
