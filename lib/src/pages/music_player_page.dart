@@ -6,14 +6,42 @@ class MusicPlayerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        CustomAppBar(),
-        _DiscDuration(),
-        _Title(),
-        Expanded(child: _Lyrics())
-      ],
-    ));
+      body: Stack(
+        children: [
+          _Background(),
+          Column(
+            children: [
+              CustomAppBar(),
+              _DiscDuration(),
+              _Title(),
+              Expanded(child: _Lyrics())
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Background extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    return Container(
+      width: double.infinity,
+      height: screenSize.height * 0.8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60)),
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.center,
+          colors: [
+            Color(0xff33333E),
+            Color(0xff201E28),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -47,10 +75,33 @@ class _Lyrics extends StatelessWidget {
   }
 }
 
-class _Title extends StatelessWidget {
+class _Title extends StatefulWidget {
   const _Title({
     Key? key,
   }) : super(key: key);
+
+  @override
+  __TitleState createState() => __TitleState();
+}
+
+class __TitleState extends State<_Title> with SingleTickerProviderStateMixin {
+  bool isPLaying = false;
+  late AnimationController playAnimation;
+
+  @override
+  void initState() {
+    playAnimation = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500)
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    this.playAnimation.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +133,19 @@ class _Title extends StatelessWidget {
             elevation: 0,
             highlightElevation: 0,
             onPressed: () {
-              // TODO: Boton
+              if (this.isPLaying) {
+                this.playAnimation.reverse();
+                this.isPLaying = false;
+              } else {
+                this.playAnimation.forward();
+                this.isPLaying = true;
+              }
             },
             backgroundColor: Color(0xffF8CB51),
-            child: Icon(Icons.play_arrow),
+            child: AnimatedIcon(
+              progress: playAnimation,
+              icon: AnimatedIcons.play_pause,
+            ),
           )
         ],
       ),
