@@ -12,7 +12,16 @@ flutter pub get
 
 ## Screenshot
 
-![demo](https://raw.githubusercontent.com/velascoandres/music_player/main/demo/screenshot.png)
+
+
+<p align="center">
+    <img 
+        src="https://raw.githubusercontent.com/velascoandres/music_player/main/demo/screenshot.png"
+        alt="screenshot"
+        width="220"
+        height="420"
+    />
+</p>
 
 ## Demo
 
